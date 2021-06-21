@@ -1,9 +1,10 @@
 const Product = require('../models/Product')
 
 module.exports = {
-  getAllProducts: async () => {
-    return await Product.find({}).sort({ createdAt: -1 })
-  },
+  getAllProducts: async () => 
+    await Product.find({}).sort({ createdAt: -1 })
+  ,
+  getProduct : async (id)=> await Product.findById(id), 
   addProduct: async (productInfo, images) => {
     const { name, admin } = productInfo
 

@@ -8,6 +8,11 @@ router.get('/', auth, async (req, res) =>
   res.status(200).json(await productController.getAllProducts())
 )
 
+//get product 
+router.get('/:id', auth, async (req, res) =>
+  res.status(200).json(await productController.getProduct(req.params.id))
+)
+
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '..', 'uploads'),
   filename: function (req, file, cb) {
