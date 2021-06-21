@@ -1,0 +1,540 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Online store",
+        "description": "Woodie online store for chairs",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:4000",
+    "basePath": "/api",
+    "tags": [
+        {
+            "name": "Online Store",
+            "descruption": "API"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/users/register": {
+            "post": {
+                "description": "Create a new user",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "first_name",
+                        "in": "formData",
+                        "description": "User first name",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "formData",
+                        "description": "User last name",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "User email",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "User password",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "gender",
+                        "in": "formData",
+                        "description": "User gender ('Male' - 'Female')",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "avatar",
+                        "in": "formData",
+                        "description": "User avatar",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success message",
+                        "schema": {
+                            "$ref": "#/definitions/successResponse"
+                        }
+                    },
+                    "400": {
+                        "description": " a list of validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationErrors"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "description": "User Login",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User email and password to login",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success message with token and custom id",
+                        "schema": {
+                            "$ref": "#/definitions/loginSuccess"
+                        }
+                    },
+                    "401": {
+                        "description": "Error message",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "description": "Returns all users from system",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "token to be passed as a header",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/user"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error message",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/user/{id}": {
+            "get": {
+                "description": "Returns specific user - pass user _id ",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "user id to be passed in route",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "token to be passed as a header",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object of one user",
+                        "schema": {
+                            "$ref": "#/definitions/successUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Error message",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/loggedInUser/{customId}": {
+            "get": {
+                "description": "Returns specific user - pass user custom id ",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "custom id",
+                        "in": "path",
+                        "description": "user custom to be passed in route",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "token to be passed as a header",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object of one user",
+                        "schema": {
+                            "$ref": "#/definitions/successUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Error message",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/token": {
+            "get": {
+                "description": "Verify user token",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "token to be passed as a header",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success message with true",
+                        "schema": {
+                            "$ref": "#/definitions/successResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Error message",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/messages/add": {
+            "put": {
+                "description": "push a new message to user messages",
+                "parameters": [
+                    {
+                        "name": "auth-token",
+                        "in": "header",
+                        "description": "token to be passed as a header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "userMessage",
+                        "in": "body",
+                        "description": "Message Content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userInfoMessage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success message",
+                        "schema": {
+                            "$ref": "#/definitions/successResponse"
+                        }
+                    },
+                    "400": {
+                        "description": " Error message",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Error message",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "user": {
+            "required": [
+                "first_name",
+                "last_name",
+                "email",
+                "gender",
+                "avatar",
+                "password"
+            ],
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 40
+                },
+                "last_name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 40
+                },
+                "email": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 200
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 1024
+                },
+                "avatar": {
+                    "type": "file"
+                },
+                "messages": {
+                    "type": "array"
+                },
+                "admin": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "isActive": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "_id": {
+                    "type": "string"
+                }
+            },
+            "example": {
+                "first_name": "fake name",
+                "last_name": "fake name",
+                "email": "fake@emai.com",
+                "avatar": "avatar.jpg",
+                "gender": "Male",
+                "isActive": true,
+                "admin": false,
+                "_id": "123"
+            }
+        },
+        "userInfoMessage": {
+            "properties": {
+                "customId": {
+                    "type": "string"
+                },
+                "message": {
+                    "$ref": "#/definitions/userMessage"
+                }
+            },
+            "example" : {
+                "customId" : "jhewgyu32tvd3yr763rfd",
+                "message" : {
+                    "subject" : "fake subject",
+                    "body" : "Bla bla bla bla bla bla"
+                }
+            }
+        },
+        "userMessage": {
+            "properties": {
+                "subject": {
+                    "type": "string"
+                },
+                "body": {
+                    "type": "string"
+                }
+            }
+            
+        },
+        "userLogin": {
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "example": {
+                "email": "fake@emai.com",
+                "password": "12345678"
+            }
+        },
+        "errorResponse": {
+            "properties": {
+                "type": {
+                    "type": "boolean"
+                },
+                "body": {
+                    "type": "string"
+                }
+            },
+            "example": {
+                "type": false,
+                "body": "Something went wrong"
+            }
+        },
+        "successResponse": {
+            "properties": {
+                "type": {
+                    "type": "boolean"
+                },
+                "body": {
+                    "type": "string"
+                }
+            },
+            "example": {
+                "type": true,
+                "body": "success message"
+            }
+        },
+        "validationErrors": {
+            "properties": {
+                "type": {
+                    "type": "boolean"
+                },
+                "body": {
+                    "type": "object"
+                }
+            },
+            "example": {
+                "type": false,
+                "body": {
+                    "first_name": {
+                        "name": "ValidatorError",
+                        "message": "Is too small",
+                        "properties": {
+                            "message": "Is too small",
+                            "type": "minlength",
+                            "minlength": 2,
+                            "path": "first_name",
+                            "value": "s"
+                        },
+                        "kind": "minlength",
+                        "path": "name",
+                        "value": "s"
+                    }
+                }
+            }
+        },
+        "successUserResponse": {
+            "properties": {
+                "type": {
+                    "type": "boolean"
+                },
+                "body": {
+                    "$ref": "#/definitions/user"
+                }
+            },
+            "example": {
+                "type": true,
+                "body": {
+                    "first_name": "fake name",
+                    "last_name": "fake name",
+                    "email": "fake@emai.com",
+                    "avatar": "avatar.jpg",
+                    "gender": "Male",
+                    "isActive": true,
+                    "admin": false,
+                    "_id": "123"
+                }
+            }
+        },
+        "loginSuccess": {
+            "properties": {
+                "type": {
+                    "type": "boolean"
+                },
+                "body": {
+                    "$ref": "#/definitions/loginSuccessResponse"
+                }
+            },
+            "example": {
+                "type": true,
+                "body": {
+                    "token": "JKFHG6723refhvjk.jkkkdd74JKGJhddled67KJGjhdew.wjMGJFjhgjJH56GVJKhHfHvHfHgjjh",
+                    "id": "jhewgyu32tvd3yr763rfd"
+                }
+            }
+        },
+        "loginSuccessResponse": {
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
